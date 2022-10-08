@@ -7,11 +7,11 @@ import {
   View,
 } from "react-native"
 import React from "react"
-import Meal from "../models/meal"
+import Meal from "../../models/meal"
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
-import { RootStackParamList } from "../App"
-import MealDetails from "./MealDetails"
+import { RootStackParamList } from "../../App"
+import MealDetails from "../MealDetails"
 
 type Props = {
   item: Meal

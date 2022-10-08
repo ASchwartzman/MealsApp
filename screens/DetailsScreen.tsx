@@ -1,7 +1,8 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import React, { useLayoutEffect } from "react"
+import React, { useLayoutEffect, useContext, useState, useEffect } from "react"
 import { Image, ScrollView, StyleSheet, Text, View } from "react-native"
 import { RootStackParamList } from "../App"
+import { FavoritesContext } from "../store/context/favorites-context"
 
 import IconButton from "../components/IconButton"
 import List from "../components/MealDetail/List"
@@ -12,11 +13,19 @@ import { MEALS } from "../data/dummy-data"
 type Props = NativeStackScreenProps<RootStackParamList, "Details">
 
 export default function DetailsScreen({ route, navigation }: Props) {
+  const { favoriteMealIds, addFavorite, removeFavorite } =
+    useContext(FavoritesContext)
+
   const mealId = route.params.mealId
   const meal = MEALS.find((meal) => meal.id === mealId)
+  const mealIsFavorite = favoriteMealIds.includes(mealId)
 
-  function headerButtonPressHandler() {
-    console.log("pressed")
+  function changeFavoriteStatusHandler() {
+    if (mealIsFavorite) {
+      removeFavorite(mealId)
+    } else {
+      addFavorite(mealId)
+    }
   }
 
   useLayoutEffect(() => {
@@ -25,14 +34,14 @@ export default function DetailsScreen({ route, navigation }: Props) {
       headerRight: () => {
         return (
           <IconButton
-            icon="star"
+            icon={mealIsFavorite ? "star" : "star-outline"}
             color="white"
-            onPress={headerButtonPressHandler}
+            onPress={changeFavoriteStatusHandler}
           />
         )
       },
     })
-  }, [navigation])
+  }, [navigation, changeFavoriteStatusHandler])
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
